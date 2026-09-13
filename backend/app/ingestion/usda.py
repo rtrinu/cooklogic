@@ -1,4 +1,5 @@
 import httpx
+from fastapi import HTTPException
 
 from ..core.config import settings
 from ..schemas.ingredient import NUTRIENT_IDS, USDASummary
@@ -43,5 +44,12 @@ def nutrition_summary(food: dict) -> USDASummary:
 async def search_foods(
     query: str, dataType: list[str] | None = None
 ) -> list[USDASummary]:
-    data = await search_ingredients(query, dataType)
-    return [nutrition_summary(food) for food in data["foods"]]
+    try:
+        data = await search_ingredients(query, dataType)
+        return [nutrition_summary(food) for food in data["foods"]]
+    except httpx.HTTPStatusError as e:
+        raise HTTPException(502, f"USDA upstream error {e.response.status_code}")
+    except httpx.TimeoutException:
+        raise HTTPException(504, "USDA lookup timed out")
+    except httpx.HTTPError:
+        raise HTTPException(502, "USDA lookup failed")
