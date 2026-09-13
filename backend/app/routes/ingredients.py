@@ -20,5 +20,5 @@ async def get_ingredients():
 
 @router.get("/ingredients/ingest")
 async def ingest_ingredients(query: str):
-    data = await get_usda_ingredient(query)
+    data = await search_foods(query)
     return ingest_usda_results(data)
