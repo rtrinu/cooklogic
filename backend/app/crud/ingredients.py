@@ -1,10 +1,6 @@
 from ..core.supabase import supabase_client
 
 
-def create_ingredient_entry():
-    data = supabase_client.table("ingredient")
-
-
 def upsert_ingredient(
     name: str, description: str | None = None, category: str | None = None
 ):
@@ -21,7 +17,7 @@ def upsert_ingredient(
 
 def read_ingredient_entry():
     data = supabase_client.table("ingredients").select("*").execute()
-    return data
+    return data.data
 
 
 def update_ingredient_entry(): ...

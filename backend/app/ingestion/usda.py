@@ -25,7 +25,12 @@ def get_value(values: dict, nutrient_id: int) -> float:
 
 
 def nutrition_summary(food: dict) -> USDASummary:
-    values = {n["nutrientId"]: n.get("value", 0.0) for n in food["foodNutrients"]}
+    values = {
+        n["nutrientId"]: n.get("value", 0.0)
+        for n in food.get("foodNutrients", [])
+        if "nutrientId" in n
+    }
+
     nutrients = {
         name: get_value(values, nutrient_id)
         for name, nutrient_id in NUTRIENT_IDS.items()
@@ -33,11 +38,11 @@ def nutrition_summary(food: dict) -> USDASummary:
     }
     calories = max(0.0, values.get(1008) or values.get(2047) or 0.0)
     return USDASummary(
-        source=food["dataType"],
-        source_id=food["fdcId"],
+        source=food.get("dataType", "Foundation"),
+        source_id=food.get("fdcId", 0),
         description=food.get("description", ""),
         calories=calories,
-        **nutrients
+        **nutrients,
     )
 
 
@@ -46,7 +51,7 @@ async def search_foods(
 ) -> list[USDASummary]:
     try:
         data = await search_ingredients(query, dataType)
-        return [nutrition_summary(food) for food in data["foods"]]
+        return [nutrition_summary(food) for food in data.get("foods", [])]
     except httpx.HTTPStatusError as e:
         raise HTTPException(502, f"USDA upstream error {e.response.status_code}")
     except httpx.TimeoutException:

@@ -9,5 +9,5 @@ def upsert_nutrition(ingredient_id: int, source: str, source_id: int, values: di
             "source_id": str(source_id),
             **values,
         },
-        on_conflict="source, source_id",
+        on_conflict="source,source_id",
     ).execute()

@@ -25,3 +25,12 @@ NUTRIENT_IDS = {
     "sodium": 1093,
     "calories": 1008,
 }
+
+
+class Ingredient(BaseModel):
+    id: int
+    name: str
+    category: str | None = None
+    description: str | None = None
+    default_unit: str | None = None
+    is_active: bool
