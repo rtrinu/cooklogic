@@ -1,5 +1,5 @@
 from pathlib import Path
-
+from typing import List
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 BACKEND_DIR = Path(__file__).resolve().parents[2]
@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     supabase_service_role_key: str
     usda_api_key: str
     usda_search_endpoint: str
+    allow_origins: List[str]
     model_config = SettingsConfigDict(env_file=BACKEND_DIR / ".env", extra="ignore")
 
 
