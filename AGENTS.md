@@ -2,8 +2,10 @@
 
 ## Status
 
-Early scaffold — `frontend/` and `backend/` skeletons exist but no source code yet.
-Verify commands before trusting them; update this file as conventions are established.
+Early build — `frontend/` has a working Next.js landing scaffold; `backend/` has working
+USDA ingredient ingestion. Core product logic (recipes, ranking, substitutions, auth UX)
+is not built yet. Verify commands before trusting them; update this file as conventions
+are established.
 
 ## Project direction
 
@@ -18,8 +20,8 @@ Verify commands before trusting them; update this file as conventions are establ
   - Ingredient substitution engine based on functional role, flavour compatibility, and
     nutritional properties — not generic replacements.
 - Planned stack:
-  - Frontend: Next.js / TypeScript — scaffolded but **Next.js not installed yet**; `npm run dev`
-    fails until `npm install next react react-dom` runs.
+  - Frontend: Next.js / TypeScript (Next 16, App Router, Tailwind v4) — installed and
+    buildable (landing page lives in `frontend/app/page.tsx`; components in `frontend/components/`).
   - Backend: FastAPI / Python (uv-managed)
   - Data: Supabase (PostgreSQL, Auth, RLS for per-user data access)
   - Nutrition data: USDA FoodData Central, Open Food Facts
@@ -27,8 +29,10 @@ Verify commands before trusting them; update this file as conventions are establ
 
 ## Layout
 
-- `frontend/` — package.json (name `cooklogic-frontend`, `"type": "module"`, scripts
-  `dev`/`build`/`start` → `next`). Package manager: **npm**.
+- `frontend/` — Next.js app root. `package.json` (name `app`, `"type": "module"`, scripts
+  `dev`/`build`/`start`/`lint` → `next`/`eslint`; Next 16.3, React 19, Tailwind v4).
+  App Router dir is `frontend/app/`, shared components in `frontend/components/`,
+  `@/*` alias maps to `frontend/`. Package manager: **npm**.
 - `backend/` — uv project (`cooklogic-backend`, `requires-python >=3.12`). Source goes in
   `backend/app/`, tests in `backend/tests/`. `.venv/` is git-ignored.
 - `.env.example` — Supabase keys (`SUPABASE_URL`, `SUPABASE_ANON_KEY`,
